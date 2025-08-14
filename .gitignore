@@ -6,3 +6,10 @@
 /pkg/
 /spec/reports/
 /tmp/
+
+# Built gem packages (配布成果物はGitで管理しない)
+*.gem
+
+# ライブラリ(gem)として公開する場合は Gemfile.lock も通常コミットしない
+Gemfile.lock
+
