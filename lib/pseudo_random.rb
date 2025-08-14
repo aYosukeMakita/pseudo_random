@@ -84,8 +84,8 @@ module PseudoRandom
     end
 
     # ZigZag encode signed -> unsigned integer
-    def zigzag(n)
-      n >= 0 ? (n << 1) : ((-n << 1) - 1)
+    def zigzag(num)
+      num >= 0 ? (num << 1) : ((-num << 1) - 1)
     end
 
     # Varint (7-bit continuation) encoding
