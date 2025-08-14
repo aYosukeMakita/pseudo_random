@@ -3,6 +3,8 @@
 require 'test_helper'
 require 'date'
 
+# rubocop:disable Metrics/ClassLength
+
 class TestPseudoRandom < Minitest::Test
   def test_that_it_has_a_version_number
     refute_nil ::PseudoRandom::VERSION
@@ -331,3 +333,5 @@ class TestPseudoRandom < Minitest::Test
     refute_equal seq1, seq2
   end
 end
+
+# rubocop:enable Metrics/ClassLength
