@@ -1,0 +1,48 @@
+AllCops:
+  TargetRubyVersion: 3.1
+
+##################### Layout ##################################
+Layout/LineLength:
+  Max: 120
+
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+##################### Style ###################################
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: single_quotes
+
+Style/NumericPredicate:
+  Enabled: false
+
+##################### Naming #################################
+Naming/VariableNumber:
+  Enabled: false
+
+##################### Metrics #################################
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/MethodLength:
+  Max: 80
+
+Metrics/AbcSize:
+  Max: 70
+
+Metrics/CyclomaticComplexity:
+  Max: 20
+
+Metrics/PerceivedComplexity:
+  Max: 15

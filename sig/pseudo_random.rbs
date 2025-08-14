@@ -1,0 +1,24 @@
+module PseudoRandom
+  VERSION: String
+  # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+
+  class Generator
+    ALPHABETIC_CHARS: Array[String]
+    ALPHANUMERIC_CHARS: Array[String]
+
+    def initialize: (?untyped seed) -> void
+
+    def rand: () -> Float
+             | (Integer max) -> Integer
+             | (Float max) -> Float
+             | (Range[Integer, Integer] range) -> Integer
+             | (Range[Float, Float] range) -> Float
+
+    def hex: (Integer length) -> String
+    def alphabetic: (Integer length) -> String
+    def alphanumeric: (Integer length) -> String
+  end
+
+  def self.new: (?untyped seed) -> Generator
+  def self.rand: (untyped seed) -> Float
+end
