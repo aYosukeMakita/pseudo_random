@@ -28,20 +28,25 @@ This section documents the specs, boundary conditions, and determinism guarantee
 
 ### Per-method specifics
 
-| Method                 | Character set                             | Notes                                                                                                                                                  |
-| ---------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `hex(length)`          | `0-9a-f` (16 chars, lowercase)            | Uses 32‑bit integers -> 8 hex chars at a time; remainder (1–7) from another 32‑bit block prefix. Uniform over all hex strings of the requested length. |
-| `alphabetic(length)`   | `A-Z` (26) + `a-z` (26) = 52              | 3-char chunks (since 52^3 < 2^32) plus remainder (1–2 chars). Uniform.                                                                                 |
-| `alphanumeric(length)` | `A-Z` (26) + `a-z` (26) + `0-9` (10) = 62 | 5-char chunks (62^5 < 2^32) plus remainder (1–4 chars). Uniform.                                                                                       |
+| Method                 | Character set / Output                    | Notes                                                                                                                                                                                                                                                                               |
+| ---------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rand([limit])`        | Float [0.0, 1.0), Integer, Range, etc.    | No argument: float in [0.0, 1.0). Integer: integer in [0, n). Float: float in [0.0, n). Range (integer or float): value in the given range. Supports both integer and floating-point ranges, e.g., `rand(1..10)` or `rand(1.0..2.0)`. Compatible with Ruby's Random. Deterministic. |
+| `hex(length)`          | `0-9a-f` (16 chars, lowercase)            | Uses 32‑bit integers -> 8 hex chars at a time; remainder (1–7) from another 32‑bit block prefix. Uniform over all hex strings of the requested length.                                                                                                                              |
+| `alphabetic(length)`   | `A-Z` (26) + `a-z` (26) = 52              | 3-char chunks (since 52^3 < 2^32) plus remainder (1–2 chars). Uniform.                                                                                                                                                                                                              |
+| `alphanumeric(length)` | `A-Z` (26) + `a-z` (26) + `0-9` (10) = 62 | 5-char chunks (62^5 < 2^32) plus remainder (1–4 chars). Uniform.                                                                                                                                                                                                                    |
 
 ### Uniformity
 
 Each chunk uses `Random#rand(base^k)` for an integer in `0...(base^k)` which is then expanded via repeated mod/div to `k` characters. This yields a uniform distribution over all `base^k` length-`k` strings. Remainder segments use the same approach. Thus (subject to the statistical quality of Ruby's underlying PRNG) each character position is unbiased and independent across chunks.
 
+For `rand`, the output is uniformly distributed over the specified range or interval, matching the behavior of Ruby's built-in `Random`. The statistical quality depends on the underlying PRNG.
+
 ### Performance / limits
 
 - Time complexity: O(length). Memory: O(length) for the resulting string.
 - Very large values (millions of characters) imply higher allocation cost; consider generating in smaller segments if required.
+
+For `rand`, each call is O(1) in time and memory. Extremely large integer ranges or high-precision floats may be limited by Ruby's internal implementation.
 
 ### Determinism Policy
 
@@ -53,15 +58,21 @@ As stated in Versioning: the mapping `(seed, call order) -> output sequence` is 
 
 ### Exceptions (current)
 
-| Condition               | Exception       |
-| ----------------------- | --------------- |
-| `length < 0`            | `ArgumentError` |
-| `length` not an Integer | `ArgumentError` |
+| Condition                  | Exception       |
+| -------------------------- | --------------- |
+| `length < 0`               | `ArgumentError` |
+| `length` not an Integer    | `ArgumentError` |
+| invalid argument to `rand` | `ArgumentError` |
 
 ### Examples
 
 ```ruby
 g = PseudoRandom.new("seed")
+g.rand           # => float in [0.0, 1.0)
+g.rand(10)       # => integer in [0, 10)
+g.rand(1..100)   # => integer in [1, 100]
+g.rand(10.0)     # => float in [0.0, 10.0)
+g.rand(1.0..2.0) # => float in [1.0, 2.0)
 g.hex(10)         # => 10 hex chars (0-9a-f)
 g.alphabetic(12)  # => 12 alphabetic chars (A-Za-z)
 g.alphanumeric(8) # => 8 alphanumeric chars (A-Za-z0-9)
@@ -148,6 +159,8 @@ generator = PseudoRandom.new(42)
 ```
 
 ### Diverse seed types
+
+# You can pass any Ruby object as a seed to `PseudoRandom.new`. The object will be normalized into a deterministic hash value using a canonicalization algorithm (based on FNV-1a). This ensures that objects with the same content (even if of different types, e.g., a string `"42"` and an integer `42`) will produce different random sequences, while identical objects always yield the same sequence. Supported seed types include numbers, strings, arrays, hashes, symbols, Time objects, and any other Ruby object.
 
 ```ruby
 # String seed
