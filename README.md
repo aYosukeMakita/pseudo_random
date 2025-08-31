@@ -160,7 +160,7 @@ generator = PseudoRandom.new(42)
 
 ### Diverse seed types
 
-# You can pass any Ruby object as a seed to `PseudoRandom.new`. The object will be normalized into a deterministic hash value using a canonicalization algorithm (based on FNV-1a). This ensures that objects with the same content (even if of different types, e.g., a string `"42"` and an integer `42`) will produce different random sequences, while identical objects always yield the same sequence. Supported seed types include numbers, strings, arrays, hashes, symbols, Time objects, and any other Ruby object.
+You can pass any Ruby object as a seed to `PseudoRandom.new`. The object will be normalized into a deterministic hash value using a canonicalization algorithm (based on FNV-1a). This ensures that objects with the same content (even if of different types, e.g., a string `"42"` and an integer `42`) will produce different random sequences, while identical objects always yield the same sequence. Supported seed types include numbers, strings, arrays, hashes, symbols, Time objects, and any other Ruby object.
 
 ```ruby
 # String seed
