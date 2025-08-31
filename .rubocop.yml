@@ -1,7 +1,11 @@
 AllCops:
   TargetRubyVersion: 3.1
+  Include:
+    - 'lib/**/*'
+    - 'test/**/*'
   Exclude:
     - 'pseudo_random.gemspec'
+    - 'vendor/**/*'
 
 ##################### Layout #################################
 Layout/LineLength:
