@@ -313,7 +313,7 @@ class TestPseudoRandom < Minitest::Test
     200.times do
       v = generator.rand(1..6)
       assert v.is_a?(Integer)
-      assert v >= 1 && v <= 6, "Expected 1..6 got #{v}"
+      assert v.between?(1, 6), "Expected 1..6 got #{v}"
     end
   end
 
