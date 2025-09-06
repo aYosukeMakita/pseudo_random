@@ -117,7 +117,7 @@ module PseudoRandom
 
     def to_seed_int(obj)
       # Use C++ extension if available
-      if NATIVE_EXTENSION_AVAILABLE && defined?(PseudoRandom::SeedNative)
+      if NATIVE_EXTENSION_AVAILABLE
         PseudoRandom::SeedNative.to_seed_int(obj)
       else
         # Fallback: use Ruby implementation
