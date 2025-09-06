@@ -10,6 +10,12 @@ class TestPseudoRandom < Minitest::Test
     refute_nil ::PseudoRandom::VERSION
   end
 
+  def test_native_extension_status
+    # Test that the method exists and returns a boolean
+    assert [true, false].include?(PseudoRandom.native_extension_loaded?)
+    puts "Native extension loaded: #{PseudoRandom.native_extension_loaded?}"
+  end
+
   def test_integer_seed
     generator = PseudoRandom::Generator.new(42)
     result = generator.rand

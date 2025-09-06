@@ -1,18 +1,9 @@
 # frozen_string_literal: true
 
-# Safely load C++ extension, use Ruby implementation only if it fails
-begin
-  require_relative '../ext/pseudo_random_native/pseudo_random_native'
-  NATIVE_EXTENSION_AVAILABLE = true
-rescue LoadError => e
-  # When C++ extension is not available (compilation failure, environment incompatibility, etc.)
-  warn "PseudoRandom: C++ extension not available, falling back to Ruby implementation: #{e.message}" if $DEBUG
-  NATIVE_EXTENSION_AVAILABLE = false
-end
-
 module PseudoRandom
-  # Backup the original Seed module as SeedRuby
-  module SeedRuby
+  # Internal seed canonicalization & hashing (FNV-1a 64-bit)
+  # Uses C++ implementation if available, otherwise pure Ruby
+  module Seed
     FNV_OFFSET = 0xcbf29ce484222325
     FNV_PRIME  = 0x100000001b3
     MASK64     = 0xffff_ffff_ffff_ffff
@@ -21,14 +12,24 @@ module PseudoRandom
 
     # Public: Convert arbitrary Ruby object to a deterministic 31-bit Integer for Random.new
     def to_seed_int(obj)
-      h = FNV_OFFSET
-      canonical_each_byte(obj) do |byte|
-        h ^= byte
-        h = (h * FNV_PRIME) & MASK64
+      if NATIVE_EXTENSION_LOADED
+        # Use C++ implementation for better performance
+        PseudoRandom::SeedNative.to_seed_int(obj)
+      else
+        # Fall back to Ruby implementation
+        h = FNV_OFFSET
+        canonical_each_byte(obj) do |byte|
+          h ^= byte
+          h = (h * FNV_PRIME) & MASK64
+        end
+        s = h ^ (h >> 32)
+        s & 0x7fff_ffff
       end
-      s = h ^ (h >> 32)
-      s & 0x7fff_ffff
     end
+
+    private
+
+    # Ruby fallback implementations (used when native extension is not available)
 
     # Depth-first canonical serialization streamed as bytes
     def canonical_each_byte(obj, ...)
@@ -62,13 +63,18 @@ module PseudoRandom
       when Hash
         yield 'h'.ord
         encode_varint(obj.length, ...)
-        # Collect key-value pairs with canonical string keys, sort, and serialize
-        pairs = obj.map do |k, v|
-          [k.to_s, k, v]
-        end
-        pairs.sort_by { |ks, _, _| ks }.each do |ks, _original_key, value|
+        # Canonical order by key string representation to avoid insertion order dependence
+        obj.keys.map(&:to_s).sort.each do |ks|
           canonical_each_byte(ks, ...)
-          canonical_each_byte(value, ...)
+          original_key = if obj.key?(ks)
+                           ks
+                         elsif obj.key?(ks.to_sym)
+                           ks.to_sym
+                         else
+                           # Fallback (should not usually happen)
+                           obj.keys.find { |k| k.to_s == ks }
+                         end
+          canonical_each_byte(obj[original_key], ...)
         end
       when Time
         yield 'T'.ord
@@ -103,34 +109,6 @@ module PseudoRandom
           yield(byte | 0x80)
         end
       end
-    end
-  end
-
-  # Use C++ extension by default, fallback to Ruby implementation
-  module Seed
-    module_function
-
-    def to_seed_int(obj)
-      # Use C++ extension if available
-      if NATIVE_EXTENSION_AVAILABLE
-        PseudoRandom::SeedNative.to_seed_int(obj)
-      else
-        # Fallback: use Ruby implementation
-        PseudoRandom::SeedRuby.to_seed_int(obj)
-      end
-    end
-
-    # Export Ruby implementation methods (for testing)
-    def canonical_each_byte(obj, ...)
-      PseudoRandom::SeedRuby.canonical_each_byte(obj, ...)
-    end
-
-    def zigzag(num)
-      PseudoRandom::SeedRuby.zigzag(num)
-    end
-
-    def encode_varint(num, ...)
-      PseudoRandom::SeedRuby.encode_varint(num, ...)
     end
   end
 end
