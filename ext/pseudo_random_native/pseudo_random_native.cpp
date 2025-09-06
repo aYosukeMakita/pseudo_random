@@ -147,7 +147,7 @@ private:
                     encode_varint(NUM2ULL(nsec));
                     break;
                 }
-            // Fall through to default case to handle non-Time T_DATA objects as generic objects
+            // fall through to default case to handle non-Time T_DATA objects as generic objects
             [[fallthrough]];
             default:
                 // Fallback: class name + ':' + to_s
