@@ -27,10 +27,6 @@ module PseudoRandom
       end
     end
 
-    private
-
-    # Ruby fallback implementations (used when native extension is not available)
-
     # Depth-first canonical serialization streamed as bytes
     def canonical_each_byte(obj, ...)
       case obj
