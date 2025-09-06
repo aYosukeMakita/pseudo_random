@@ -2,7 +2,6 @@ require 'mkmf'
 
 # Use C++ compiler
 $CPPFLAGS += ' -std=c++17'
-$LIBS += ''
 
 # Extension name
 extension_name = 'pseudo_random_native'
