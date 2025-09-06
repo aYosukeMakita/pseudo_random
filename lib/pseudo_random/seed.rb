@@ -12,7 +12,7 @@ module PseudoRandom
 
     # Public: Convert arbitrary Ruby object to a deterministic 31-bit Integer for Random.new
     def to_seed_int(obj)
-      if ::NATIVE_EXTENSION_LOADED
+      if PseudoRandom.native_extension_loaded?
         # Use C++ implementation for better performance
         PseudoRandom::SeedNative.to_seed_int(obj)
       else
