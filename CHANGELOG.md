@@ -16,16 +16,39 @@ Deprecations: A deprecated feature will remain for at least one MINOR release af
 
 ## [Unreleased]
 
-### 追加
+## [1.0.1] - 2025-09-06
 
-- ここに未リリースの変更を追記してください。
+### Added
+
+- **C++ Native Extension**: High-performance C++ implementation for Seed module
+  - Achieves 20-50x speedup over Ruby implementation
+  - Automatic fallback functionality ensures Ruby implementation works even without C++ compiler
+  - Maintains complete compatibility with existing API
+- Added Rake tasks for building and testing C++ extension
+- Added installation guide (INSTALLATION.md) and C++ extension documentation (README_CPP.md)
+
+### Improved
+
+- Enhanced error handling during gem installation
+  - Gem installation continues even if C++ extension compilation fails
+  - Safe fallback functionality ensures operation in any environment
+- Significant performance improvements
+  - Reduced Seed calculation overhead from 60-65% to 13-16% of total execution time
+
+### Technical Details
+
+- C++ optimized implementation of FNV-1a 64-bit hash algorithm
+- Cross-platform support compliant with C++17 standard
+- Seamless integration using Ruby C API
+- Guaranteed complete compatibility of deterministic output (identical results to Ruby implementation)
 
 ## [1.0.0] - 2025-08-14
 
-### 追加
+### Added
 
-- 初回リリース: 決定的な擬似乱数ジェネレータ (数値 / hex / alphabetic / alphanumeric 文字列生成)
-- 任意オブジェクトシード対応
+- Initial release: Deterministic pseudo-random generator (numbers / hex / alphabetic / alphanumeric string generation)
+- Support for arbitrary object seeds
 
-[Unreleased]: https://github.com/aYosukeMakita/pseudo_random/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/aYosukeMakita/pseudo_random/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/aYosukeMakita/pseudo_random/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/aYosukeMakita/pseudo_random/releases/tag/v1.0.0
