@@ -24,8 +24,17 @@ have_library('stdc++')
 # Check C++17 support
 unless have_macro('__cplusplus', 'iostream')
   puts 'Warning: C++ compiler not found. Ruby implementation will be used.'
-  File.write('Makefile',
-             "all:\n\techo 'Skipping C++ extension compilation'\n\ninstall:\n\techo 'C++ extension not available'\n\nclean:\n\techo 'Nothing to clean'\n")
+  makefile_content = <<~MAKEFILE
+    all:
+    	echo 'Skipping C++ extension compilation'
+    
+    install:
+    	echo 'C++ extension not available'
+    
+    clean:
+    	echo 'Nothing to clean'
+  MAKEFILE
+  File.write('Makefile', makefile_content)
   exit 0
 end
 
