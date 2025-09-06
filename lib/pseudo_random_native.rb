@@ -62,18 +62,13 @@ module PseudoRandom
       when Hash
         yield 'h'.ord
         encode_varint(obj.length, ...)
-        # Canonical order by key string representation to avoid insertion order dependence
-        obj.keys.map(&:to_s).sort.each do |ks|
+        # Collect key-value pairs with canonical string keys, sort, and serialize
+        pairs = obj.map do |k, v|
+          [k.to_s, k, v]
+        end
+        pairs.sort_by { |ks, _, _| ks }.each do |ks, _original_key, value|
           canonical_each_byte(ks, ...)
-          original_key = if obj.key?(ks)
-                           ks
-                         elsif obj.key?(ks.to_sym)
-                           ks.to_sym
-                         else
-                           # Fallback (should not usually happen)
-                           obj.keys.find { |k| k.to_s == ks }
-                         end
-          canonical_each_byte(obj[original_key], ...)
+          canonical_each_byte(value, ...)
         end
       when Time
         yield 'T'.ord
