@@ -73,9 +73,10 @@ private:
             case T_STRING:
                 bytes.push_back('s');
                 {
-                    // Use the string as-is, assume it's already properly encoded
-                    const char* str_ptr = RSTRING_PTR(obj);
-                    long str_len = RSTRING_LEN(obj);
+                    // Explicitly encode the string to UTF-8 to match Ruby implementation
+                    VALUE utf8_str = rb_str_export_to_enc(obj, rb_utf8_encoding());
+                    const char* str_ptr = RSTRING_PTR(utf8_str);
+                    long str_len = RSTRING_LEN(utf8_str);
                     encode_varint(str_len);
                     for (long i = 0; i < str_len; i++) {
                         bytes.push_back(static_cast<uint8_t>(str_ptr[i]));
@@ -87,8 +88,9 @@ private:
                 bytes.push_back('y');
                 {
                     VALUE str = rb_sym2str(obj);
-                    const char* str_ptr = RSTRING_PTR(str);
-                    long str_len = RSTRING_LEN(str);
+                    VALUE utf8_str = rb_str_export_to_enc(str, rb_utf8_encoding());
+                    const char* str_ptr = RSTRING_PTR(utf8_str);
+                    long str_len = RSTRING_LEN(utf8_str);
                     encode_varint(str_len);
                     for (long i = 0; i < str_len; i++) {
                         bytes.push_back(static_cast<uint8_t>(str_ptr[i]));
@@ -159,9 +161,15 @@ private:
                                      ":" + 
                                      std::string(RSTRING_PTR(obj_str), RSTRING_LEN(obj_str));
                     
-                    encode_varint(rep.length());
-                    for (char c : rep) {
-                        bytes.push_back(static_cast<uint8_t>(c));
+                    // Encode the representation string to UTF-8 to match Ruby implementation
+                    VALUE rep_str = rb_str_new(rep.c_str(), rep.length());
+                    VALUE utf8_rep = rb_str_export_to_enc(rep_str, rb_utf8_encoding());
+                    const char* utf8_ptr = RSTRING_PTR(utf8_rep);
+                    long utf8_len = RSTRING_LEN(utf8_rep);
+                    
+                    encode_varint(utf8_len);
+                    for (long i = 0; i < utf8_len; i++) {
+                        bytes.push_back(static_cast<uint8_t>(utf8_ptr[i]));
                     }
                 }
                 break;
