@@ -123,8 +123,8 @@ module PseudoRandom
         # Fallback: use Ruby implementation
         PseudoRandom::SeedRuby.to_seed_int(obj)
       end
-    rescue LoadError, NameError => e
-      # Use Ruby implementation if C++ extension fails
+    rescue NameError => e
+      # Use Ruby implementation if C++ extension method fails
       warn "PseudoRandom: Falling back to Ruby implementation: #{e.message}" if $DEBUG
       PseudoRandom::SeedRuby.to_seed_int(obj)
     end
