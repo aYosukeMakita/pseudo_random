@@ -36,5 +36,8 @@ Gem::Specification.new do |spec|
   # Add an `exe/` directory and set spec.bindir/spec.executables if a CLI is introduced.
   spec.require_paths = ['lib']
 
+  # C++ extension configuration
+  spec.extensions = ['ext/pseudo_random_native/extconf.rb']
+
   # Add runtime dependencies with: spec.add_dependency 'gem_name', '~> x.y'
 end

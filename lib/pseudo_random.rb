@@ -266,3 +266,11 @@ module PseudoRandom
     generator.rand
   end
 end
+
+# Automatically load C++ extension if available
+begin
+  require_relative 'pseudo_random_native'
+rescue LoadError
+  # Use Ruby implementation only when C++ extension is unavailable
+  # No warning displayed (normal operation)
+end
