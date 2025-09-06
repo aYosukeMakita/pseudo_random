@@ -146,8 +146,7 @@ private:
                     break;
                 }
                 // Fall through to default case
-                [[fallthrough]];
-                
+            [[fallthrough]];
             default:
                 // Fallback: class name + ':' + to_s
                 bytes.push_back('o');
