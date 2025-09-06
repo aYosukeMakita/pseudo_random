@@ -27,10 +27,10 @@ unless have_macro('__cplusplus', 'iostream')
   makefile_content = <<~MAKEFILE
     all:
     	echo 'Skipping C++ extension compilation'
-    
+
     install:
     	echo 'C++ extension not available'
-    
+
     clean:
     	echo 'Nothing to clean'
   MAKEFILE
