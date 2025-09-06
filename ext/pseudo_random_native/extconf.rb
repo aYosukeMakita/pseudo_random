@@ -21,9 +21,16 @@ $CPPFLAGS += ' -Wall -Wextra'
 # Link C++ standard library
 have_library('stdc++')
 
-# Check C++17 support
-unless have_macro('__cplusplus', 'iostream')
-  puts 'Warning: C++ compiler not found. Ruby implementation will be used.'
+# Check C++17 support using try_compile
+cxx17_test = <<~CPP
+  #include <optional>
+  int main() {
+    std::optional<int> x = 42;
+    return x.value_or(0);
+  }
+CPP
+unless try_compile('C++17 support', cxx17_test, '-std=c++17')
+  puts 'Warning: C++17 compiler not found. Ruby implementation will be used.'
   makefile_content = <<~MAKEFILE
     all:
     	echo 'Skipping C++ extension compilation'
