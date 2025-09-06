@@ -20,7 +20,7 @@ $CPPFLAGS += ' -O3 -DNDEBUG'
 $CPPFLAGS += ' -Wall -Wextra'
 
 # Link C++ standard library
-have_library('stdc++')
+$LIBS += ' -lstdc++'
 
 # Create Makefile
 create_makefile(extension_name)
