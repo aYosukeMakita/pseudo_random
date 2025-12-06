@@ -147,15 +147,27 @@ random_range = generator.rand(1..100)
 puts random_range  # => 64
 ```
 
-### Convenience one-off method
+### Convenience one-off methods
 
 ```ruby
-# One-off random number (legacy convenience)
-result = PseudoRandom.rand(42)
+# One-off random number
+result = PseudoRandom.rand(seed: 42)
 puts result  # => 0.6394267984578837
 
-# Create a new generator explicitly
-generator = PseudoRandom.new(42)
+# One-off hex string
+hex = PseudoRandom.hex(seed: 'my_seed', length: 16)
+puts hex  # => "a1b2c3d4e5f67890"
+
+# One-off alphabetic string
+alpha = PseudoRandom.alphabetic(seed: 'my_seed', length: 12)
+puts alpha  # => "AbCdEfGhIjKl"
+
+# One-off alphanumeric string
+alnum = PseudoRandom.alphanumeric(seed: 'my_seed', length: 10)
+puts alnum  # => "A1b2C3d4E5"
+
+# These are equivalent to creating a generator and calling the method once:
+# PseudoRandom.hex(seed: 'my_seed', length: 16) == PseudoRandom.new('my_seed').hex(16)
 ```
 
 ### Diverse seed types

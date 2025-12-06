@@ -338,6 +338,117 @@ class TestPseudoRandom < Minitest::Test
     seq2 = Array.new(20) { g2.rand(1..6) }
     refute_equal seq1, seq2
   end
+
+  # --- One-off class methods ---
+
+  def test_one_off_rand
+    result = PseudoRandom.rand(seed: 42)
+    assert result.is_a?(Float)
+    assert result >= 0.0 && result < 1.0
+    # Deterministic: same seed produces same result
+    assert_equal PseudoRandom.rand(seed: 42), PseudoRandom.rand(seed: 42)
+    # Equivalent to PseudoRandom.new(42).rand
+    assert_equal PseudoRandom.new(42).rand, PseudoRandom.rand(seed: 42)
+  end
+
+  def test_one_off_rand_different_seeds
+    result1 = PseudoRandom.rand(seed: 'seed1')
+    result2 = PseudoRandom.rand(seed: 'seed2')
+    refute_equal result1, result2
+  end
+
+  def test_one_off_hex
+    result = PseudoRandom.hex(seed: 'test_seed', length: 16)
+    assert result.is_a?(String)
+    assert_equal 16, result.length
+    assert_match(/\A[0-9a-f]{16}\z/, result)
+    # Deterministic: same seed and length produces same result
+    assert_equal PseudoRandom.hex(seed: 'test_seed', length: 16),
+                 PseudoRandom.hex(seed: 'test_seed', length: 16)
+    # Equivalent to PseudoRandom.new(seed).hex(length)
+    assert_equal PseudoRandom.new('test_seed').hex(16),
+                 PseudoRandom.hex(seed: 'test_seed', length: 16)
+  end
+
+  def test_one_off_hex_different_seeds
+    result1 = PseudoRandom.hex(seed: 'seed1', length: 16)
+    result2 = PseudoRandom.hex(seed: 'seed2', length: 16)
+    refute_equal result1, result2
+  end
+
+  def test_one_off_hex_with_length_0
+    result = PseudoRandom.hex(seed: 'test', length: 0)
+    assert_equal '', result
+  end
+
+  def test_one_off_hex_with_invalid_length
+    error = assert_raises(ArgumentError) do
+      PseudoRandom.hex(seed: 'test', length: -1)
+    end
+    assert_equal 'Length must be a non-negative integer', error.message
+  end
+
+  def test_one_off_alphabetic
+    result = PseudoRandom.alphabetic(seed: 'test_seed', length: 20)
+    assert result.is_a?(String)
+    assert_equal 20, result.length
+    assert_match(/\A[A-Za-z]{20}\z/, result)
+    # Deterministic: same seed and length produces same result
+    assert_equal PseudoRandom.alphabetic(seed: 'test_seed', length: 20),
+                 PseudoRandom.alphabetic(seed: 'test_seed', length: 20)
+    # Equivalent to PseudoRandom.new(seed).alphabetic(length)
+    assert_equal PseudoRandom.new('test_seed').alphabetic(20),
+                 PseudoRandom.alphabetic(seed: 'test_seed', length: 20)
+  end
+
+  def test_one_off_alphabetic_different_seeds
+    result1 = PseudoRandom.alphabetic(seed: 'seed1', length: 20)
+    result2 = PseudoRandom.alphabetic(seed: 'seed2', length: 20)
+    refute_equal result1, result2
+  end
+
+  def test_one_off_alphabetic_with_length_0
+    result = PseudoRandom.alphabetic(seed: 'test', length: 0)
+    assert_equal '', result
+  end
+
+  def test_one_off_alphabetic_with_invalid_length
+    error = assert_raises(ArgumentError) do
+      PseudoRandom.alphabetic(seed: 'test', length: -1)
+    end
+    assert_equal 'Length must be a non-negative integer', error.message
+  end
+
+  def test_one_off_alphanumeric
+    result = PseudoRandom.alphanumeric(seed: 'test_seed', length: 12)
+    assert result.is_a?(String)
+    assert_equal 12, result.length
+    assert_match(/\A[A-Za-z0-9]{12}\z/, result)
+    # Deterministic: same seed and length produces same result
+    assert_equal PseudoRandom.alphanumeric(seed: 'test_seed', length: 12),
+                 PseudoRandom.alphanumeric(seed: 'test_seed', length: 12)
+    # Equivalent to PseudoRandom.new(seed).alphanumeric(length)
+    assert_equal PseudoRandom.new('test_seed').alphanumeric(12),
+                 PseudoRandom.alphanumeric(seed: 'test_seed', length: 12)
+  end
+
+  def test_one_off_alphanumeric_different_seeds
+    result1 = PseudoRandom.alphanumeric(seed: 'seed1', length: 12)
+    result2 = PseudoRandom.alphanumeric(seed: 'seed2', length: 12)
+    refute_equal result1, result2
+  end
+
+  def test_one_off_alphanumeric_with_length_0
+    result = PseudoRandom.alphanumeric(seed: 'test', length: 0)
+    assert_equal '', result
+  end
+
+  def test_one_off_alphanumeric_with_invalid_length
+    error = assert_raises(ArgumentError) do
+      PseudoRandom.alphanumeric(seed: 'test', length: -1)
+    end
+    assert_equal 'Length must be a non-negative integer', error.message
+  end
 end
 
 # rubocop:enable Metrics/ClassLength
