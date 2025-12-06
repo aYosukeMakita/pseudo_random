@@ -172,7 +172,13 @@ module PseudoRandom
   # Generates a single pseudo-random number based on the given seed (one-off convenience)
   # @param seed [Object] the seed value for the generator
   # @return [Float] a float in [0.0, 1.0)
-  def self.rand(seed:)
+  def self.rand(positional_arg = nil, seed: nil)
+    if !positional_arg.nil? && seed.nil?
+      raise ArgumentError,
+            "PseudoRandom.rand(seed) is deprecated in v2.0.0. Use PseudoRandom.rand(seed: #{positional_arg.inspect}) instead."
+    end
+    raise ArgumentError, 'missing keyword: seed. Usage: PseudoRandom.rand(seed: your_seed)' if seed.nil?
+
     generator = new(seed)
     generator.rand
   end
