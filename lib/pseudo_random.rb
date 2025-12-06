@@ -175,7 +175,8 @@ module PseudoRandom
   def self.rand(positional_arg = nil, seed: nil)
     if !positional_arg.nil? && seed.nil?
       raise ArgumentError,
-            "PseudoRandom.rand(seed) is deprecated in v2.0.0. Use PseudoRandom.rand(seed: #{positional_arg.inspect}) instead."
+            'PseudoRandom.rand(seed) is deprecated in v2.0.0. ' \
+            "Use PseudoRandom.rand(seed: #{positional_arg.inspect}) instead."
     end
     raise ArgumentError, 'missing keyword: seed. Usage: PseudoRandom.rand(seed: your_seed)' if seed.nil?
 
