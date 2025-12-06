@@ -20,5 +20,9 @@ module PseudoRandom
   end
 
   def self.new: (?untyped seed) -> Generator
-  def self.rand: (untyped seed) -> Float
+  def self.rand: (?untyped positional_arg, ?seed: untyped) -> Float
+  def self.hex: (seed: untyped, length: Integer) -> String
+  def self.alphabetic: (seed: untyped, length: Integer) -> String
+  def self.alphanumeric: (seed: untyped, length: Integer) -> String
+  def self.native_extension_loaded?: () -> bool
 end
