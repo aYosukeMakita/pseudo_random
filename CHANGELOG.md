@@ -16,6 +16,20 @@ Deprecations: A deprecated feature will remain for at least one MINOR release af
 
 ## [Unreleased]
 
+## [2.0.0] - 2025-12-06
+
+### Changed
+
+- **Breaking Change**: `PseudoRandom.rand` method now requires keyword arguments
+  - Old API (deprecated): `PseudoRandom.rand(seed)` - positional argument
+  - New API: `PseudoRandom.rand(seed: your_seed)` - keyword argument
+  - The old positional argument API will raise an `ArgumentError` with a deprecation message
+  - This change unifies the API style with other one-off convenience methods (`hex`, `alphabetic`, `alphanumeric`)
+
+### Fixed
+
+- Fixed rubocop warnings
+
 ## [1.0.1] - 2025-09-06
 
 ### Added
@@ -49,6 +63,7 @@ Deprecations: A deprecated feature will remain for at least one MINOR release af
 - Initial release: Deterministic pseudo-random generator (numbers / hex / alphabetic / alphanumeric string generation)
 - Support for arbitrary object seeds
 
-[Unreleased]: https://github.com/aYosukeMakita/pseudo_random/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/aYosukeMakita/pseudo_random/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/aYosukeMakita/pseudo_random/compare/v1.0.1...v2.0.0
 [1.0.1]: https://github.com/aYosukeMakita/pseudo_random/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/aYosukeMakita/pseudo_random/releases/tag/v1.0.0

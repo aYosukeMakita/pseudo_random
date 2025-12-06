@@ -169,10 +169,46 @@ module PseudoRandom
     Generator.new(seed)
   end
 
-  # Generates a single pseudo-random number based on the given seed (backward compatibility)
-  def self.rand(seed)
+  # Generates a single pseudo-random number based on the given seed (one-off convenience)
+  # @param seed [Object] the seed value for the generator
+  # @return [Float] a float in [0.0, 1.0)
+  def self.rand(positional_arg = nil, seed: nil)
+    if !positional_arg.nil? && seed.nil?
+      raise ArgumentError,
+            'PseudoRandom.rand(seed) is deprecated in v2.0.0. ' \
+            "Use PseudoRandom.rand(seed: #{positional_arg.inspect}) instead."
+    end
+    raise ArgumentError, 'missing keyword: seed. Usage: PseudoRandom.rand(seed: your_seed)' if seed.nil?
+
     generator = new(seed)
     generator.rand
+  end
+
+  # Generates a single hexadecimal string based on the given seed (one-off convenience)
+  # @param seed [Object] the seed value for the generator
+  # @param length [Integer] the number of hexadecimal characters to generate
+  # @return [String] a hexadecimal string with lowercase a-f
+  def self.hex(seed:, length:)
+    generator = new(seed)
+    generator.hex(length)
+  end
+
+  # Generates a single alphabetic string based on the given seed (one-off convenience)
+  # @param seed [Object] the seed value for the generator
+  # @param length [Integer] the number of alphabetic characters to generate
+  # @return [String] a string containing uppercase letters (A-Z) and lowercase letters (a-z)
+  def self.alphabetic(seed:, length:)
+    generator = new(seed)
+    generator.alphabetic(length)
+  end
+
+  # Generates a single alphanumeric string based on the given seed (one-off convenience)
+  # @param seed [Object] the seed value for the generator
+  # @param length [Integer] the number of alphanumeric characters to generate
+  # @return [String] a string containing A-Z, a-z, and 0-9
+  def self.alphanumeric(seed:, length:)
+    generator = new(seed)
+    generator.alphanumeric(length)
   end
 
   # Returns true if native C++ extension is loaded and available

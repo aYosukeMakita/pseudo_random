@@ -6,6 +6,7 @@ AllCops:
   Exclude:
     - 'pseudo_random.gemspec'
     - 'vendor/**/*'
+    - 'lib/**/*.so'
 
 ##################### Layout #################################
 Layout/LineLength:
