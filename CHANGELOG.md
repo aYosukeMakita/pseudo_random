@@ -16,6 +16,14 @@ Deprecations: A deprecated feature will remain for at least one MINOR release af
 
 ## [Unreleased]
 
+## [2.0.1] - 2025-12-20
+
+### Fixed
+
+- Fixed README examples to match actual execution results
+  - Updated all code examples with correct output values
+  - Examples now accurately reflect the deterministic behavior of the library
+
 ## [2.0.0] - 2025-12-06
 
 ### Changed
@@ -63,7 +71,8 @@ Deprecations: A deprecated feature will remain for at least one MINOR release af
 - Initial release: Deterministic pseudo-random generator (numbers / hex / alphabetic / alphanumeric string generation)
 - Support for arbitrary object seeds
 
-[Unreleased]: https://github.com/aYosukeMakita/pseudo_random/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/aYosukeMakita/pseudo_random/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/aYosukeMakita/pseudo_random/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/aYosukeMakita/pseudo_random/compare/v1.0.1...v2.0.0
 [1.0.1]: https://github.com/aYosukeMakita/pseudo_random/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/aYosukeMakita/pseudo_random/releases/tag/v1.0.0
