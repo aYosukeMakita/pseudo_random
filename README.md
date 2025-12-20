@@ -132,19 +132,19 @@ generator = PseudoRandom.new(42)
 
 # Float in [0.0, 1.0)
 random_float = generator.rand
-puts random_float  # => 0.6394267984578837
+puts random_float  # => 0.8731369804701281
 
 # Integer in [0, 9]
 random_int = generator.rand(10)
-puts random_int  # => 6
+puts random_int  # => 9
 
 # Float in [0.0, 10.0)
 random_float_range = generator.rand(10.0)
-puts random_float_range  # => 9.66814512009282
+puts random_float_range  # => 3.440017825456998
 
 # Integer in [1, 100]
 random_range = generator.rand(1..100)
-puts random_range  # => 64
+puts random_range  # => 41
 ```
 
 ### Convenience one-off methods
@@ -152,19 +152,19 @@ puts random_range  # => 64
 ```ruby
 # One-off random number
 result = PseudoRandom.rand(seed: 42)
-puts result  # => 0.6394267984578837
+puts result  # => 0.8731369804701281
 
 # One-off hex string
 hex = PseudoRandom.hex(seed: 'my_seed', length: 16)
-puts hex  # => "a1b2c3d4e5f67890"
+puts hex  # => "cee117d6757980b7"
 
 # One-off alphabetic string
 alpha = PseudoRandom.alphabetic(seed: 'my_seed', length: 12)
-puts alpha  # => "AbCdEfGhIjKl"
+puts alpha  # => "aZikVznxlLXj"
 
 # One-off alphanumeric string
 alnum = PseudoRandom.alphanumeric(seed: 'my_seed', length: 10)
-puts alnum  # => "A1b2C3d4E5"
+puts alnum  # => "Q3a2S8sXED"
 
 # These are equivalent to creating a generator and calling the method once:
 # PseudoRandom.hex(seed: 'my_seed', length: 16) == PseudoRandom.new('my_seed').hex(16)
@@ -177,23 +177,23 @@ You can pass any Ruby object as a seed to `PseudoRandom.new`. The object will be
 ```ruby
 # String seed
 generator1 = PseudoRandom.new("hello")
-puts generator1.rand  # => 0.1915194503788923
+puts generator1.rand  # => 0.37097030662852004
 
 # Array seed
 generator2 = PseudoRandom.new([1, 2, 3])
-puts generator2.rand  # => 0.04548605918364251
+puts generator2.rand  # => 0.41837699041143994
 
 # Hash seed
 generator3 = PseudoRandom.new({ name: "John", age: 30 })
-puts generator3.rand  # => 0.7550896311312906
+puts generator3.rand  # => 0.5869273234945404
 
 # Time seed
 generator4 = PseudoRandom.new(Time.new(2023, 1, 1))
-puts generator4.rand  # => 0.4320558086698993
+puts generator4.rand  # => 0.6345803634459501
 
 # Omitted seed (uses hash of nil)
 generator5 = PseudoRandom.new
-puts generator5.rand  # => 0.8501480898450888
+puts generator5.rand  # => 0.9527695090684619
 ```
 
 ### Hex string generation
@@ -203,15 +203,15 @@ generator = PseudoRandom.new("secret")
 
 # 8 hex characters
 hex_string = generator.hex(8)
-puts hex_string  # => "a1b2c3d4"
+puts hex_string  # => "0b628b64"
 
 # 10 hex characters
 hex_string_10 = generator.hex(10)
-puts hex_string_10  # => "a50ee918e5"
+puts hex_string_10  # => "6f291838f3"
 
 # 16 hex characters
 long_hex = generator.hex(16)
-puts long_hex  # => "a1b2c3d4e5f67890"
+puts long_hex  # => "afef24ef63f4e104"
 
 # Empty string (length 0)
 empty_hex = generator.hex(0)
@@ -231,11 +231,11 @@ gen2 = PseudoRandom.new("test")
 end
 
 # Example output:
-# gen1: 0.5985762380674765, gen2: 0.5985762380674765
-# gen1: 0.8325673044064309, gen2: 0.8325673044064309
-# gen1: 0.24136065771243595, gen2: 0.24136065771243595
-# gen1: 0.7392418174919607, gen2: 0.7392418174919607
-# gen1: 0.9853406830436152, gen2: 0.9853406830436152
+# gen1: 0.7714906738735868, gen2: 0.7714906738735868
+# gen1: 0.9245604822851962, gen2: 0.9245604822851962
+# gen1: 0.4030548732252476, gen2: 0.4030548732252476
+# gen1: 0.07008281657880167, gen2: 0.07008281657880167
+# gen1: 0.8898582626604018, gen2: 0.8898582626604018
 ```
 
 ### Practical examples
